@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #8C1D2F;
+  --color-maroon-deep: #5E1220;
+  --color-gold: #C9973F;
+  --color-ink: #1A1418;
+  --color-paper: #F6F4F1;
+  --color-sage: #2F6B4F;
+  --color-alert: #C2410C;
+  --color-mute: #8A8288;
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Screen-to-screen transition. Keyed on <main>, so it replays on every move. */
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Entry animation for a policy arriving in the vault after import. */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scanning sweep over the photo while damage is being assessed. */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(220%);
+  }
+}
+
+/* Slow breath on the claim stage that is currently in progress. */
+@keyframes pulseRing {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(140, 29, 47, 0.35);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px rgba(140, 29, 47, 0);
+  }
+}
+
+/* Tap feedback on every control — one rule rather than a class on 100 buttons,
+   so anything added later inherits it. */
+button,
+[role='button'] {
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    opacity 150ms ease;
+}
+
+button:not(:disabled):active,
+[role='button']:not([aria-disabled='true']):active {
+  transform: scale(0.98);
+}
+
+/* Accessibility floor: a visible ring on any keyboard-focused control. Outline
+   rather than box-shadow, so it reads on white cards and on maroon alike. */
+:focus-visible {
+  outline: 2px solid var(--color-maroon);
+  outline-offset: 2px;
+}
+
+/* Against the maroon header a maroon ring would vanish. */
+.bg-maroon :focus-visible,
+[class*='linear-gradient'] :focus-visible {
+  outline-color: var(--color-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  /* Kills the stage pulse, the assessment shimmer, the screen transition,
+     the ring draw-on and the tap scale, in one place. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  button:not(:disabled):active,
+  [role='button']:not([aria-disabled='true']):active {
+    transform: none;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
