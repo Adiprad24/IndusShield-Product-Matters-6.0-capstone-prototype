@@ -73,7 +73,9 @@ export default function Home({ navigate }) {
 
   return (
     <div className="pb-24">
-      <header className="rounded-b-3xl bg-[linear-gradient(160deg,var(--color-maroon-deep),var(--color-maroon))] px-5 pt-6 pb-8">
+      {/* Nothing but the greeting row lives in the header; the deep bottom
+          padding is the clear space the ring straddles into. */}
+      <header className="relative z-0 rounded-b-3xl bg-[linear-gradient(160deg,var(--color-maroon-deep),var(--color-maroon))] px-5 pt-6 pb-20">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm text-white/70">Good morning</p>
@@ -108,13 +110,23 @@ export default function Home({ navigate }) {
         </div>
       </header>
 
-      <section className="relative -mt-24">
-        <ProtectionRing onPress={() => navigate('score')} />
+      {/* -mt-16 puts roughly the top third of the ring over the maroon and
+          keeps its centre — the score — down on the paper. */}
+      <section className="relative z-10 -mt-16">
+        <div className="relative mx-auto h-[190px] w-[190px]">
+          {/* White medallion behind the arcs, ~85% of the ring. Guarantees the
+              score and its label always sit on white, whatever they overlap. */}
+          <div
+            aria-hidden="true"
+            className="absolute top-1/2 left-1/2 h-[162px] w-[162px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-md"
+          />
+          <ProtectionRing size={190} onPress={() => navigate('score')} />
+        </div>
 
         <button
           type="button"
           onClick={() => navigate('score')}
-          className="mx-auto mt-3 block min-h-11 px-5 text-sm text-ink"
+          className="mx-auto mt-5 block min-h-11 px-5 text-sm text-ink"
         >
           <span className="font-medium text-alert">{GAP_COUNT} gaps</span> found in your
           protection
@@ -205,7 +217,8 @@ export default function Home({ navigate }) {
 export function HomeSkeleton() {
   return (
     <div className="pb-24">
-      <div className="rounded-b-3xl bg-[linear-gradient(160deg,var(--color-maroon-deep),var(--color-maroon))] px-5 pt-6 pb-8">
+      {/* Mirrors the real header/ring geometry so nothing shifts on load. */}
+      <div className="relative z-0 rounded-b-3xl bg-[linear-gradient(160deg,var(--color-maroon-deep),var(--color-maroon))] px-5 pt-6 pb-20">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="h-4 w-24 rounded bg-white/20" />
@@ -215,9 +228,9 @@ export function HomeSkeleton() {
         </div>
       </div>
 
-      <div className="-mt-24 flex flex-col items-center">
-        <Skeleton className="h-[200px] w-[200px] rounded-full" />
-        <Skeleton className="mt-4 h-4 w-48" />
+      <div className="relative z-10 -mt-16 flex flex-col items-center">
+        <div className="h-[190px] w-[190px] rounded-full bg-white shadow-md" />
+        <Skeleton className="mt-5 h-4 w-48" />
       </div>
 
       <div className="px-5 pt-6">

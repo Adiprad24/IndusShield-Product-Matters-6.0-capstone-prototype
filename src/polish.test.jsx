@@ -133,3 +133,33 @@ test('every icon-only button carries an accessible name', () => {
     }
   }
 })
+
+test('the ring straddles the header without colliding with the greeting', () => {
+  const { container } = render(<App />)
+
+  const header = container.querySelector('header')
+  expect(header.className, 'deep padding is the clear space the ring sits in').toContain(
+    'pb-20',
+  )
+  expect(header.className, 'header must sit under the ring').toContain('z-0')
+
+  const ringSection = header.nextElementSibling
+  expect(ringSection.className).toContain('-mt-16')
+  expect(ringSection.className, 'ring must sit over the header edge').toContain('z-10')
+
+  // A white medallion behind the arcs keeps the score legible over maroon.
+  const disc = ringSection.querySelector('.rounded-full.bg-white')
+  expect(disc, 'backing disc').not.toBeNull()
+  expect(disc.className).toContain('shadow-md')
+
+  // 190px ring, 162px disc: centre sits 31px below the header edge, on paper.
+  const svg = ringSection.querySelector('svg')
+  expect(svg.getAttribute('width')).toBe('190')
+})
+
+test('the skeleton reserves the same space the ring will occupy', () => {
+  const { container } = render(<HomeSkeleton />)
+  const banner = container.querySelector('.rounded-b-3xl')
+  expect(banner.className, 'same header padding as the real screen').toContain('pb-20')
+  expect(banner.nextElementSibling.className, 'same ring offset').toContain('-mt-16')
+})
